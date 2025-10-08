@@ -1,59 +1,209 @@
 # AI Agent Configuration for Visualizations Repository
 
-This file provides instructions for AI agents (Claude Code, GitHub Copilot, etc.) working in this repository.
+This file provides instructions for AI agents (Claude Code, Claude Desktop, GitHub Copilot, etc.) working in this repository.
 
 ---
 
 ## Repository Purpose
 
-This repository is for **Val Diaz** to deploy interactive web visualizations, dashboards, and reports to GitHub Pages.
+This repository is for **Val Diaz** (MyBambu President) to deploy interactive web visualizations, dashboards, and reports to GitHub Pages.
 
 **Live Site**: https://pwatson-mybambu.github.io/visualizations/
+
+**Owner**: Non-technical user - simplicity and automation are critical
 
 ---
 
 ## Core Principles
 
-1. **Simplicity First**: Val is not a developer. Everything should be as simple as possible.
-2. **Automation Preferred**: Claude Desktop automation is the recommended workflow.
-3. **Clean File Naming**: Always use hyphenated, descriptive filenames (e.g., `q4-sales-report.html`)
-4. **GitHub Pages**: All artifacts are deployed to GitHub Pages automatically.
+1. **Simplicity First**: Val is not a developer - everything must be as simple as possible
+2. **Automation Preferred**: Claude Desktop automation is the recommended workflow
+3. **Modern & Professional**: Use cutting-edge UI frameworks for sleek, impressive visualizations
+4. **Self-Contained**: All files must work standalone on GitHub Pages (no build step)
+5. **GitHub Pages Compatible**: Static HTML/CSS/JavaScript only - no server-side code
 
 ---
 
-## Repository Structure
+## GitHub Pages Capabilities & Limitations
 
+### ✅ What Works on GitHub Pages:
+
+1. **Static Files**:
+   - HTML, CSS, JavaScript
+   - Images (PNG, JPG, SVG, WebP)
+   - Fonts (WOFF, WOFF2, TTF)
+   - JSON, CSV data files
+
+2. **Client-Side Frameworks**:
+   - Pure vanilla JavaScript
+   - React/Vue/Svelte (if bundled to single HTML file)
+   - Tailwind CSS (via CDN)
+   - Chart.js, D3.js, Plotly.js
+   - Mermaid diagrams
+
+3. **CDN Libraries**:
+   - Any JavaScript library via CDN (jsDelivr, unpkg, cdnjs)
+   - Google Fonts, Font Awesome icons
+   - CSS frameworks (Tailwind, Bootstrap)
+
+### ❌ What Doesn't Work:
+
+1. **Server-Side Code**:
+   - No Node.js, Python, PHP, Ruby backends
+   - No databases (MySQL, PostgreSQL, MongoDB)
+   - No API endpoints you create (must use external APIs)
+
+2. **Build Tools**:
+   - No npm build step
+   - No webpack, Vite, or bundlers
+   - Everything must be pre-compiled or use CDN
+
+3. **Dynamic Server Features**:
+   - No server-side rendering (SSR)
+   - No environment variables at runtime
+   - No file uploads or server-side processing
+
+---
+
+## Recommended UI Technologies & Libraries
+
+### 🎨 Styling Frameworks (Choose One Per Project)
+
+#### Option 1: Tailwind CSS (Recommended for Modern Look)
+```html
+<script src="https://cdn.tailwindcss.com"></script>
 ```
-visualizations/
-├── artifacts/               # ← Val's HTML files go here (publicly accessible)
-│   ├── test.html           # Test page with purple gradient
-│   └── instructions.html   # Interactive guide with tabs
-├── archives/               # For old/archived visualizations
-├── templates/              # Reusable HTML templates
-├── deploy.sh              # One-command deploy script
-├── CLAUDE.md              # This file - AI agent instructions
-├── CLAUDE_INSTRUCTIONS.txt # Instructions for Claude Desktop config
-├── CLAUDE_DESKTOP_SETUP.md # How to configure Claude Desktop
-├── INSTRUCTIONS_FOR_VAL.md # User-facing instructions
-├── SETUP_SUMMARY.md       # Complete setup reference
-└── README.md              # Repository overview
+- **Pros**: Ultra-modern, utility-first, highly customizable
+- **Best For**: Dashboards, data displays, professional reports
+- **Examples**: ShadCN-style components, modern card layouts
+
+#### Option 2: Custom CSS with CSS Variables
+```css
+:root {
+  --primary: #667eea;
+  --secondary: #764ba2;
+  --success: #10b981;
+  /* Modern color scheme */
+}
+```
+- **Pros**: Full control, no dependencies, clean code
+- **Best For**: Unique designs, performance-critical pages
+
+### 📊 Chart & Visualization Libraries
+
+#### Chart.js (Recommended - Simplest)
+```html
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+```
+- **Best For**: Bar charts, line graphs, pie charts, simple dashboards
+- **Pros**: Easy to use, great docs, responsive
+- **Examples**: Sales data, metrics, KPIs
+
+#### D3.js (Advanced - Most Powerful)
+```html
+<script src="https://d3js.org/d3.v7.min.js"></script>
+```
+- **Best For**: Custom visualizations, complex data relationships
+- **Pros**: Extremely flexible, publication-quality graphics
+- **Difficulty**: Steeper learning curve
+
+#### Plotly.js (Interactive - Professional)
+```html
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+```
+- **Best For**: Scientific charts, 3D plots, interactive dashboards
+- **Pros**: Highly interactive, professional appearance
+- **Examples**: Financial data, scientific reports
+
+### 🔀 Diagram Libraries
+
+#### Mermaid (Recommended for Diagrams)
+```html
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true });
+</script>
+```
+- **Best For**: Flowcharts, sequence diagrams, Gantt charts, ER diagrams
+- **Pros**: Simple markdown-like syntax
+- **Examples**:
+```html
+<div class="mermaid">
+graph TD
+    A[Start] --> B{Decision}
+    B -->|Yes| C[Option 1]
+    B -->|No| D[Option 2]
+</div>
+```
+
+### 🎭 Animation & Interaction
+
+#### GSAP (GreenSock Animation Platform)
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+```
+- **Best For**: Smooth animations, scroll effects, transitions
+- **Pros**: Professional-grade animations, great performance
+
+#### CSS Animations (Built-in)
+```css
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+```
+- **Best For**: Simple hover effects, loading states
+- **Pros**: No dependencies, fast, modern
+
+---
+
+## Standard File Structure
+
+### Single-Page Visualization
+```
+artifacts/
+└── dashboard-name.html          # Self-contained file
+```
+
+### Multi-Page Visualization
+```
+artifacts/
+├── project-overview.html        # Landing page
+├── project-details.html         # Detailed view
+├── project-summary.html         # Summary/conclusion
+└── project-assets/             # Shared resources (optional)
+    ├── data.json               # Shared data
+    ├── config.js               # Shared configuration
+    └── styles.css              # Shared styles (if extracted)
+```
+
+**Navigation Pattern** (use relative links):
+```html
+<!-- In project-overview.html -->
+<nav>
+  <a href="project-overview.html">Overview</a>
+  <a href="project-details.html">Details</a>
+  <a href="project-summary.html">Summary</a>
+</nav>
 ```
 
 ---
 
 ## File Naming Standards
 
-**ALWAYS follow these rules when creating files:**
+**ALWAYS follow these rules:**
 
 ✅ **Good filenames:**
-- `q4-sales-dashboard.html`
-- `client-presentation-2024.html`
-- `revenue-analysis.html`
+- `q4-revenue-dashboard.html`
+- `client-presentation-march-2024.html`
+- `team-performance-metrics.html`
+- `sales-funnel-analysis.html`
 
 ❌ **Bad filenames:**
 - `file1.html` (not descriptive)
 - `my report.html` (has spaces)
-- `Sales_Dashboard.html` (uses underscores instead of hyphens)
+- `Sales_Dashboard.html` (uses underscores)
+- `dashboard!.html` (special characters)
 
 **Rules:**
 1. Use hyphens (`-`), not spaces or underscores
@@ -64,83 +214,299 @@ visualizations/
 
 ---
 
-## When Creating HTML Visualizations
+## HTML Template Pattern (Modern & Professional)
 
-### Standard Template Pattern
+### Base Template with Tailwind CSS & Chart.js
 
-All HTML files should be **self-contained** with:
-- Complete HTML structure (`<!DOCTYPE html>`, `<head>`, `<body>`)
-- Inline CSS styles (no external stylesheets)
-- Inline JavaScript if needed (no external scripts)
-- Responsive design (mobile-friendly)
-- Modern, professional styling
-
-### Design Guidelines
-
-**Preferred style approach:**
-- Clean, modern design with gradients
-- Card-based layouts
-- Subtle animations (fade-in, hover effects)
-- Professional color schemes (blues, purples, greens)
-- Good typography (system fonts like `-apple-system, BlinkMacSystemFont`)
-- Responsive grid layouts
-
-**Example starter template:**
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Title Here</title>
+    <title>Your Visualization Title</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Optional: Mermaid for diagrams -->
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* Custom styles if needed */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            min-height: 100vh;
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
         }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        /* Add more styles as needed */
     </style>
 </head>
-<body>
-    <div class="container">
-        <!-- Content here -->
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen p-6">
+    <!-- Container -->
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="bg-white rounded-2xl shadow-lg p-8 mb-6 fade-in">
+            <h1 class="text-4xl font-bold text-gray-900">Dashboard Title</h1>
+            <p class="text-gray-600 mt-2">Subtitle or description</p>
+        </header>
+
+        <!-- Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Card 1 - Chart -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 fade-in" style="animation-delay: 0.1s">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Revenue Trend</h2>
+                <canvas id="myChart"></canvas>
+            </div>
+
+            <!-- Card 2 - Mermaid Diagram -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 fade-in" style="animation-delay: 0.2s">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Process Flow</h2>
+                <div class="mermaid">
+                    graph LR
+                        A[Start] --> B[Process]
+                        B --> C[End]
+                </div>
+            </div>
+
+            <!-- Card 3 - Stats -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 fade-in" style="animation-delay: 0.3s">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Key Metrics</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center p-4 bg-blue-50 rounded-xl">
+                        <div class="text-3xl font-bold text-blue-600">$1.2M</div>
+                        <div class="text-sm text-gray-600 mt-1">Revenue</div>
+                    </div>
+                    <div class="text-center p-4 bg-green-50 rounded-xl">
+                        <div class="text-3xl font-bold text-green-600">+23%</div>
+                        <div class="text-sm text-gray-600 mt-1">Growth</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 - Table -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 fade-in" style="animation-delay: 0.4s">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Top Performers</h2>
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-200">
+                            <th class="text-left py-2">Name</th>
+                            <th class="text-right py-2">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2">Item 1</td>
+                            <td class="text-right">$100K</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Chart.js Example
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderColor: 'rgb(102, 126, 234)',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
 ```
 
 ---
 
-## Multi-Page Visualizations
+## Multi-Page Navigation Pattern
 
-When creating multiple linked pages:
+### Navigation Component (Include on Each Page)
 
-1. **Save all pages** to the `artifacts/` folder
-2. **Use relative links** between pages:
-   ```html
-   <!-- ✅ Correct -->
-   <a href="details.html">View Details</a>
+```html
+<!-- Sticky Navigation Bar -->
+<nav class="bg-white rounded-2xl shadow-lg p-4 mb-6 sticky top-6 z-50">
+    <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold text-gray-800">Project Name</h3>
+        <div class="flex gap-4">
+            <a href="overview.html" class="px-4 py-2 rounded-lg hover:bg-blue-50 transition">Overview</a>
+            <a href="details.html" class="px-4 py-2 rounded-lg hover:bg-blue-50 transition">Details</a>
+            <a href="summary.html" class="px-4 py-2 rounded-lg hover:bg-blue-50 transition">Summary</a>
+        </div>
+    </div>
+</nav>
+```
 
-   <!-- ❌ Wrong - don't use full URLs -->
-   <a href="https://pwatson-mybambu.github.io/visualizations/artifacts/details.html">View Details</a>
-   ```
-3. **Include navigation** on each page
-4. **Deploy all pages together** in a single commit
+### Active Page Highlighting
+
+```html
+<script>
+    // Highlight current page in navigation
+    const currentPage = window.location.pathname.split('/').pop();
+    document.querySelectorAll('nav a').forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+            link.classList.add('bg-blue-500', 'text-white');
+            link.classList.remove('hover:bg-blue-50');
+        }
+    });
+</script>
+```
+
+---
+
+## Best Practices for Val's Visualizations
+
+### 1. **Always Include Page Title & Date**
+```html
+<div class="text-sm text-gray-500 mt-2">
+    Created: <span id="date"></span>
+</div>
+<script>
+    document.getElementById('date').textContent = new Date().toLocaleDateString();
+</script>
+```
+
+### 2. **Mobile Responsive (Always)**
+- Use Tailwind responsive classes: `sm:`, `md:`, `lg:`, `xl:`
+- Test on mobile viewport (320px minimum width)
+- Stack cards vertically on small screens
+
+### 3. **Loading States for Charts**
+```html
+<div id="chartContainer" class="relative">
+    <div id="loading" class="absolute inset-0 flex items-center justify-center">
+        <div class="text-gray-400">Loading chart...</div>
+    </div>
+    <canvas id="myChart"></canvas>
+</div>
+<script>
+    // Hide loading after chart renders
+    const chart = new Chart(ctx, {...});
+    document.getElementById('loading').style.display = 'none';
+</script>
+```
+
+### 4. **Print-Friendly Styles**
+```html
+<style>
+    @media print {
+        body { background: white !important; }
+        .no-print { display: none !important; }
+    }
+</style>
+```
+
+### 5. **Share Button (Optional)**
+```html
+<button onclick="navigator.share({title: 'Dashboard', url: window.location.href})"
+        class="px-4 py-2 bg-blue-500 text-white rounded-lg no-print">
+    Share
+</button>
+```
+
+---
+
+## Mermaid Diagram Examples
+
+### Flowchart
+```html
+<div class="mermaid">
+graph TD
+    A[Start Process] --> B{Check Status}
+    B -->|Approved| C[Deploy]
+    B -->|Rejected| D[Revise]
+    D --> B
+    C --> E[Complete]
+</div>
+```
+
+### Sequence Diagram
+```html
+<div class="mermaid">
+sequenceDiagram
+    User->>System: Submit Request
+    System->>Database: Query Data
+    Database-->>System: Return Results
+    System-->>User: Display Data
+</div>
+```
+
+### Gantt Chart
+```html
+<div class="mermaid">
+gantt
+    title Project Timeline
+    dateFormat  YYYY-MM-DD
+    section Phase 1
+    Planning           :2024-01-01, 30d
+    Development        :2024-02-01, 60d
+    section Phase 2
+    Testing            :2024-04-01, 30d
+    Deployment         :2024-05-01, 15d
+</div>
+```
+
+---
+
+## Common Tasks
+
+### Creating a Dashboard for Val
+
+1. **Understand the Goal**:
+   - What data needs to be visualized?
+   - Who is the audience?
+   - What's the key message?
+
+2. **Choose Your Stack**:
+   - Simple dashboard → Tailwind + Chart.js
+   - Process flows → Tailwind + Mermaid
+   - Complex data → Tailwind + D3.js or Plotly
+
+3. **Build the Structure**:
+   - Start with the base template
+   - Add cards for each visualization
+   - Use grid layout for organization
+
+4. **Add Interactivity**:
+   - Tooltips on charts
+   - Hover effects on cards
+   - Click actions if needed
+
+5. **Polish**:
+   - Add animations (fade-in effects)
+   - Ensure mobile responsive
+   - Add proper titles and labels
+
+6. **Deploy**:
+   - Save to `artifacts/descriptive-name.html`
+   - Run: `./deploy.sh descriptive-name.html "Description"`
+   - Share URL with Val
 
 ---
 
@@ -148,20 +514,18 @@ When creating multiple linked pages:
 
 ### Automated Method (Recommended)
 
-When Val has Claude Desktop configured, he'll simply say:
+When Val has Claude Desktop configured:
 ```
-"Create a sales dashboard and give me a public link"
+Val: "Create a Q4 sales dashboard and give me a public link"
 ```
 
-Claude Desktop will automatically:
-1. Create the HTML file
-2. Save it to `~/Documents/visualizations/artifacts/`
-3. Run git commands to deploy
-4. Provide the public URL
+Claude Desktop automatically:
+1. Creates the HTML file
+2. Saves to `~/Documents/visualizations/artifacts/`
+3. Runs git commands to deploy
+4. Provides public URL
 
 ### Manual Deployment
-
-If Val needs to deploy manually:
 
 ```bash
 cd ~/Documents/visualizations
@@ -177,119 +541,49 @@ git push
 
 ---
 
-## Working with This Repository
-
-### As Claude Code (in this workspace):
-
-When asked to help with this repository:
-
-1. **Always save files** to the `artifacts/` folder
-2. **Use descriptive filenames** with hyphens
-3. **Create self-contained HTML** (all CSS/JS inline)
-4. **Test responsiveness** (works on mobile and desktop)
-5. **Commit and push** after creating/updating files
-
-### As Claude Desktop (Val's setup):
-
-When Val asks to create visualizations:
-
-1. **Create the HTML** with complete, professional styling
-2. **Save to** `~/Documents/visualizations/artifacts/[descriptive-name].html`
-3. **Deploy** by running:
-   ```bash
-   cd ~/Documents/visualizations
-   git add .
-   git commit -m "Add [description]"
-   git push
-   ```
-4. **Provide URL** to Val:
-   ```
-   https://pwatson-mybambu.github.io/visualizations/artifacts/[filename].html
-   ```
-5. **Remind** to wait 1-2 minutes for GitHub Pages to update
-
----
-
-## Common Tasks
-
-### Creating a New Visualization
-
-1. Ask Val what kind of visualization he needs
-2. Create a self-contained HTML file
-3. Save to `artifacts/` with descriptive name
-4. Deploy using `./deploy.sh` or git commands
-5. Provide the public URL
-
-### Updating an Existing Visualization
-
-1. Locate the file in `artifacts/`
-2. Make requested changes
-3. Save the updated file (overwrite existing)
-4. Deploy with commit message like "Update [filename] - [what changed]"
-5. Remind that URL stays the same (will update after 1-2 minutes)
-
-### Creating Multi-Page Sites
-
-1. Create all HTML pages with relative links
-2. Save all to `artifacts/` folder
-3. Deploy all together in single commit
-4. Provide all public URLs in a list
-
----
-
-## GitHub Pages URLs
-
-**Format:**
-```
-https://pwatson-mybambu.github.io/visualizations/artifacts/[filename].html
-```
-
-**Examples:**
-- `https://pwatson-mybambu.github.io/visualizations/artifacts/q4-sales-dashboard.html`
-- `https://pwatson-mybambu.github.io/visualizations/artifacts/client-presentation.html`
-
-**Deployment Time:** 1-2 minutes after pushing to GitHub
-
----
-
-## Best Practices
-
-### File Organization
-- ✅ Keep active visualizations in `artifacts/`
-- ✅ Move old/unused files to `archives/`
-- ✅ Save reusable templates to `templates/`
-- ✅ Use clear, descriptive filenames
-
-### Code Quality
-- ✅ Self-contained HTML (no external dependencies)
-- ✅ Responsive design (mobile-first)
-- ✅ Clean, commented code
-- ✅ Professional styling
-- ✅ Fast loading (no heavy libraries unless necessary)
-
-### Git Commits
-- ✅ Descriptive commit messages: "Add Q4 sales dashboard"
-- ✅ Commit related changes together
-- ✅ Push frequently (changes go live quickly)
-
-### User Experience
-- ✅ Simple, intuitive interfaces
-- ✅ Clear navigation (for multi-page sites)
-- ✅ Professional appearance
-- ✅ Fast loading times
-- ✅ Works on all devices
-
----
-
 ## Don'ts
 
 ❌ **Don't** use spaces in filenames
-❌ **Don't** create files outside the `artifacts/` folder (unless templates/archives)
-❌ **Don't** use external CSS/JS files (keep everything inline)
+❌ **Don't** create files outside `artifacts/` folder (unless templates/archives)
+❌ **Don't** use external CSS/JS files - keep everything inline or CDN
 ❌ **Don't** use absolute URLs for navigation between pages
 ❌ **Don't** forget to commit and push after creating files
-❌ **Don't** create overly complex visualizations (keep it simple for Val)
-❌ **Don't** use technologies that require build steps (no React, Vue, etc. - just HTML/CSS/JS)
+❌ **Don't** use server-side code (Node.js, PHP, Python)
+❌ **Don't** create build steps - must work directly on GitHub Pages
+❌ **Don't** use npm packages that need bundling - use CDN versions
+
+---
+
+## Tips for Creating Impressive Visualizations
+
+### Use Modern Color Schemes
+```javascript
+// Professional gradients
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+```
+
+### Add Subtle Animations
+```css
+.card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+```
+
+### Use Icon Libraries
+```html
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<i class="fas fa-chart-line"></i>
+
+<!-- Or Unicode Emojis -->
+📊 📈 📉 💰 ✅ ❌ 🎯
+```
 
 ---
 
@@ -299,16 +593,6 @@ https://pwatson-mybambu.github.io/visualizations/artifacts/[filename].html
 - **For Claude Desktop Setup**: [CLAUDE_DESKTOP_SETUP.md](CLAUDE_DESKTOP_SETUP.md)
 - **Setup Summary**: [SETUP_SUMMARY.md](SETUP_SUMMARY.md)
 - **Deploy Script**: [deploy.sh](deploy.sh)
-
----
-
-## Support
-
-If you're unsure about something:
-1. Check the [SETUP_SUMMARY.md](SETUP_SUMMARY.md) for context
-2. Look at existing files in `artifacts/` for examples
-3. Follow the patterns in [instructions.html](artifacts/instructions.html)
-4. When in doubt, keep it simple!
 
 ---
 
