@@ -339,39 +339,76 @@
             </div>
 
             <div class="card">
-                <h2><span class="number">1</span>One-Time Setup (5 minutes)</h2>
-                <p>Configure Claude Desktop to automatically deploy your visualizations:</p>
-                <ol style="margin-left: 40px; margin-top: 15px;">
+                <h2><span class="number">1</span>One-Time Setup: Let Claude Do It For You!</h2>
+                <p><strong>🤖 Just tell Claude Desktop:</strong></p>
+                <div class="code-block"><code>"Help me set up my visualizations repository. The repo is at:
+https://github.com/pwatson-mybambu/visualizations
+
+My git info:
+- Name: Val Diaz
+- Email: val@mybambu.com
+
+Please:
+1. Clone the repo to ~/Documents/visualizations
+2. Configure git with my info
+3. Help me add the Claude automation instructions to my config
+4. Test it with a simple example
+
+Walk me through each step."</code></div>
+
+                <div class="alert alert-info" style="margin-top: 20px;">
+                    <strong>✅ Claude will automatically:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>Clone the repository to your Mac</li>
+                        <li>Set up git with your information</li>
+                        <li>Guide you through adding automation to Claude Desktop config</li>
+                        <li>Test everything with a sample deployment</li>
+                    </ul>
+                    <strong style="display: block; margin-top: 10px;">You just follow along - Claude does the work!</strong>
+                </div>
+
+                <p style="margin-top: 20px;"><strong>Or do it manually:</strong></p>
+                <ol style="margin-left: 40px; margin-top: 10px;">
                     <li>Open your Claude Desktop config file:
                         <div class="code-block"><code>open ~/Library/Application\ Support/Claude/claude_desktop_config.json</code></div>
                     </li>
                     <li>Copy the instructions from <code>CLAUDE_INSTRUCTIONS.txt</code> (in your visualizations folder)</li>
                     <li>Restart Claude Desktop</li>
                 </ol>
-                <p style="margin-top: 15px;">
-                    <a href="https://github.com/pwatson-mybambu/visualizations/blob/main/CLAUDE_DESKTOP_SETUP.md" class="btn" target="_blank">📖 View Detailed Setup Guide</a>
-                </p>
             </div>
 
             <div class="card">
-                <h2><span class="number">2</span>Using Claude Desktop (After Setup)</h2>
-                <p>Simply tell Claude what you want:</p>
+                <h2><span class="number">2</span>Create Anything - Just Ask!</h2>
+                <p><strong>After setup, simply tell Claude what you want:</strong></p>
                 <div class="code-block"><code>"Create a Q4 sales dashboard and give me a public link"</code></div>
-                <p><strong>Claude will automatically:</strong></p>
-                <ul>
-                    <li>✅ Create the HTML visualization</li>
-                    <li>✅ Save it to the correct folder with a descriptive name</li>
-                    <li>✅ Deploy it to GitHub Pages</li>
-                    <li>✅ Give you the public URL to share</li>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                    <p style="margin-bottom: 15px;"><strong>🎯 What happens next (automatically):</strong></p>
+                    <ul>
+                        <li>✅ Claude creates the HTML visualization</li>
+                        <li>✅ Claude saves it to the correct folder with a descriptive name</li>
+                        <li>✅ Claude runs git commands to deploy it</li>
+                        <li>✅ Claude gives you the public URL to share</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: 600; color: #28a745;">
+                        ⏱️ Total time: ~30 seconds (then 1-2 minutes for GitHub to publish)
+                    </p>
+                </div>
+
+                <p style="margin-top: 20px;"><strong>More examples of what you can say:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>"Create a client presentation about revenue growth"</li>
+                    <li>"Make an interactive chart showing quarterly metrics"</li>
+                    <li>"Build a dashboard with our team performance stats"</li>
                 </ul>
             </div>
 
             <div class="card">
                 <h2><span class="number">3</span>Share Your Link</h2>
-                <p>Wait 1-2 minutes for deployment, then share your link with anyone:</p>
+                <p>Claude will give you a link like this:</p>
                 <div class="code-block"><code>https://pwatson-mybambu.github.io/visualizations/artifacts/your-file-name.html</code></div>
                 <div class="alert alert-info" style="margin-top: 15px;">
-                    <strong>💡 Pro Tip:</strong> Anyone with the link can view your visualization. Perfect for sharing with executives, clients, or team members!
+                    <strong>💡 Pro Tip:</strong> Anyone with the link can view your visualization. Perfect for sharing with executives, clients, or team members via email or Slack!
                 </div>
             </div>
         </div>
