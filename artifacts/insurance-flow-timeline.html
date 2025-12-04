@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Insurance Flow - Interactive Timeline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            color: white;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .timeline-wrapper {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        /* Main timeline line */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg,
+                transparent,
+                #667eea 20%,
+                #764ba2 80%,
+                transparent
+            );
+            transform: translateX(-50%);
+        }
+
+        /* Animated pulse on timeline */
+        .timeline-pulse {
+            position: absolute;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            animation: pulse-move 15s linear infinite;
+            box-shadow: 0 0 20px #667eea, 0 0 40px #667eea;
+        }
+
+        @keyframes pulse-move {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        .timeline-step {
+            position: relative;
+            margin-bottom: 120px;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .timeline-step:nth-child(1) { animation-delay: 0.2s; }
+        .timeline-step:nth-child(2) { animation-delay: 0.4s; }
+        .timeline-step:nth-child(3) { animation-delay: 0.6s; }
+        .timeline-step:nth-child(4) { animation-delay: 0.8s; }
+        .timeline-step:nth-child(5) { animation-delay: 1.0s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .timeline-step:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .step-content {
+            flex: 1;
+            max-width: 600px;
+            background: linear-gradient(135deg, rgba(26, 32, 53, 0.9), rgba(36, 42, 69, 0.9));
+            border-radius: 24px;
+            padding: 40px;
+            margin: 0 80px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .step-content:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(102, 126, 234, 0.3);
+            border-color: var(--step-color);
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--step-color), var(--step-color-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            box-shadow:
+                0 0 0 8px rgba(10, 14, 39, 1),
+                0 0 0 12px var(--step-color),
+                0 10px 30px rgba(0,0,0,0.5);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .step-content:hover ~ .timeline-marker,
+        .timeline-marker:hover {
+            transform: translateX(-50%) scale(1.2) rotate(10deg);
+            box-shadow:
+                0 0 0 8px rgba(10, 14, 39, 1),
+                0 0 0 16px var(--step-color),
+                0 0 40px var(--step-color),
+                0 20px 50px rgba(0,0,0,0.6);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--step-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .step-title {
+            font-size: 2em;
+            font-weight: 700;
+            color: white;
+        }
+
+        .step-description {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .api-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .api-label {
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--step-color);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .api-endpoint {
+            background: #1a1f35;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.95em;
+            color: #68d391;
+            border-left: 4px solid var(--step-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .method-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.75em;
+            background: var(--step-color);
+            color: white;
+        }
+
+        .data-flow {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            flex: 1;
+            min-width: 150px;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .flow-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .flow-value {
+            font-size: 1em;
+            font-weight: 600;
+            color: white;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border-left: 4px solid var(--step-color);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .highlight-box strong {
+            color: var(--step-color);
+        }
+
+        /* Step-specific colors */
+        .step-1 { --step-color: #667eea; --step-color-dark: #5568d3; }
+        .step-2 { --step-color: #f093fb; --step-color-dark: #d77de8; }
+        .step-3 { --step-color: #4facfe; --step-color-dark: #3a96e5; }
+        .step-4 { --step-color: #43e97b; --step-color-dark: #2dd062; }
+        .step-5 { --step-color: #fa709a; --step-color-dark: #e85a81; }
+
+        .completion-badge {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            padding: 20px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(67, 233, 123, 0.4);
+            font-weight: 700;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideInRight 1s ease 2s both;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .timeline-step {
+                flex-direction: column !important;
+                margin-bottom: 80px;
+            }
+
+            .step-content {
+                margin: 60px 20px 0 20px;
+                max-width: 100%;
+            }
+
+            .timeline-line {
+                display: none;
+            }
+
+            .timeline-marker {
+                position: relative;
+                left: auto;
+                transform: none;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⏱️ Auto Insurance Timeline Flow</h1>
+            <p>Interactive chronological workflow from driver registration to policy management</p>
+        </header>
+
+        <div class="timeline-wrapper">
+            <div class="timeline-line"></div>
+            <div class="timeline-pulse"></div>
+
+            <!-- Step 1: Add Drivers -->
+            <div class="timeline-step step-1">
+                <div class="step-content" onclick="handleStepClick(1)">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <div class="step-title">👤 Add Drivers</div>
+                    </div>
+
+                    <div class="step-description">
+                        Register all drivers who will be covered on the policy. At least one primary driver is required. Include driving history and violations for accurate quotes.
+                    </div>
+
+                    <div class="api-section">
+                        <div class="api-label">Primary Endpoint</div>
+                        <div class="api-endpoint">
+                            <span class="method-badge">POST</span>
+                            <span>/api/v1/insurance/drivers</span>
+                        </div>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-box">
+                            <div class="flow-label">Input</div>
+                            <div class="flow-value">Personal Info + License</div>
+                        </div>
+                        <div class="flow-box">
+                            <div class="flow-label">Output</div>
+                            <div class="flow-value">Driver ID (drv_xxx)</div>
+                        </div>
+                        <div class="flow-box">
+                            <div class="flow-label">Duration</div>
+                            <div class="flow-value">&lt;500ms</div>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>💡 Pro Tip:</strong> Mark one driver as isPrimary: true. Include all household members for accurate risk assessment.
+                    </div>
+                </div>
+                <div class="timeline-marker">🚗</div>
+            </div>
+
+            <!-- Step 2: Add Vehicles -->
+            <div class="timeline-step step-2">
+                <div class="step-content" onclick="handleStepClick(2)">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <div class="step-title">🚙 Add Vehicles</div>
+                    </div>
+
+                    <div class="step-description">
+                        Add all vehicles to be insured. Simply provide the VIN, and the system automatically decodes year, make, model, and trim from the NHTSA database.
+                    </div>
+
+                    <div class="api-section">
+                        <div class="api-label">Primary Endpoint</div>
+                        <div class="api-endpoint">
+                            <span class="method-badge">POST</span>
+                            <span>/api/v1/insurance/vehicles</span>
+                        </div>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-box">
+                            <div class="flow-label">Input</div>
+                            <div class="flow-value">VIN + Usage Info</div>
+                        </div>
+                        <div class="flow-box">
+                            <div class="flow-label">External Call</div>
+                            <div class="flow-value">VIN Database API</div>
+                        </div>
+                        <div class="flow-box">
+                            <div class="flow-label">Output</div>
+                            <div class="flow-value">Vehicle ID (veh_xxx)</div>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>🔍 Auto-Decode:</strong> VIN automatically populates year, make, model, and trim. Just add ownership type (owned/financed/leased) and primary use.
+                    </div>
+                </div>
+                <div class="timeline-marker">🔍</div>
+            </div>
+
+            <!-- Step 3: Get Quotes -->
+            <div class="timeline-step step-3">
+                <div class="step-content" onclick="handleStepClick(3)">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <div class="step-title">💰 Get Quotes</div>
+                    </div>
+
+                    <div class="step-description">
+                        Request quotes from multiple insurance carriers simultaneously. The system queries Progressive, GEICO, and State Farm in parallel and returns the best options within seconds.
+                    </div>
+
+                    <div class="api-section">
+                        <div class="api-label">Primary Endpoint</div>
+                        <div class="api-endpoint">
+                            <span class="method-badge">POST</span>
+                            <span>/api/v1/insurance/quotes</span>
+                        </div>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-box">
+                            <div class="flow-label">Reads From</div>
+                            <div class="flow-value">Drivers + Vehicles</div>
+                        </div>
+                        <div class="flow-box">
+                            <div class="flow-label">Carriers</div>
+                            <div class="flow-value">3 Parallel Requests</div>
+                        </div>
+                        <div class="flow-box">
+                            <div class="flow-label">Result</div>
+                            <div class="flow-value">Best Quote First</div>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>⚡ Lightning Fast:</strong> All carriers queried in parallel. Quotes valid for 7 days. Coverage options: liability, standard, or full (comprehensive + collision).
+                    </div>
+                </div>
+                <div class="timeline-marker">💵</div>
+            </div>
+
+            <!-- Step 4: Purchase Policy -->
+            <div class="timeline-step step-4">
+                <div class="step-content" onclick="handleStepClick(4)">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <div class="step-title">📝 Purchase Policy</div>
+                    </div>
+
+                    <div class="step-description">
+                        Select your preferred carrier and complete the purchase. The system binds the policy with the carrier, sets up automatic monthly billing via Stripe, and generates your digital ID card instantly.
+                    </div>
+
+                    <div class="api-section">
+                        <div class="api-label">Primary Endpoint</div>
+                        <div class="api-endpoint">
+                            <span class="method-badge">POST</span>
+                            <span>/api/v1/insurance/policies</span>
+                        </div>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-box">
+                            <div class="flow-label">Carrier</div>
+                            <div class="flow-value">Bind Policy</div>
+                        </div>
+                        <div class="flow-box">
+                            <div class="flow-label">Payment</div>
+                            <div class="flow-value">Stripe Setup</div>
+                        </div>
+                        <div class="flow-box">
+                            <div class="flow-label">Instant</div>
+                            <div class="flow-value">Digital ID Card</div>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>🎉 Coverage Starts Now:</strong> Policy is active immediately. Digital ID card available for download. Auto-pay ensures you never miss a payment.
+                    </div>
+                </div>
+                <div class="timeline-marker">✅</div>
+            </div>
+
+            <!-- Step 5: Manage Policy -->
+            <div class="timeline-step step-5">
+                <div class="step-content" onclick="handleStepClick(5)">
+                    <div class="step-header">
+                        <div class="step-number">5</div>
+                        <div class="step-title">⚙️ Manage Policy</div>
+                    </div>
+
+                    <div class="step-description">
+                        View full policy details including coverage breakdown, driver and vehicle information, payment history, and all policy documents. Update auto-pay settings or cancel if needed.
+                    </div>
+
+                    <div class="api-section">
+                        <div class="api-label">Management Endpoints</div>
+                        <div class="api-endpoint">
+                            <span class="method-badge">GET</span>
+                            <span>/api/v1/insurance/policies</span>
+                        </div>
+                        <div class="api-endpoint">
+                            <span class="method-badge">PUT</span>
+                            <span>/api/v1/insurance/policies/{id}/autopay</span>
+                        </div>
+                        <div class="api-endpoint">
+                            <span class="method-badge">POST</span>
+                            <span>/api/v1/insurance/policies/{id}/cancel</span>
+                        </div>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-box">
+                            <div class="flow-label">Status</div>
+                            <div class="flow-value">active | expired | cancelled</div>
+                        </div>
+                        <div class="flow-box">
+                            <div class="flow-label">Documents</div>
+                            <div class="flow-value">ID Card + Declarations</div>
+                        </div>
+                        <div class="flow-box">
+                            <div class="flow-label">Updates</div>
+                            <div class="flow-value">Auto-pay Toggle</div>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>📄 Complete Access:</strong> Full policy details, payment history, and all documents available 24/7. Cancel anytime with pro-rated refunds per carrier terms.
+                    </div>
+                </div>
+                <div class="timeline-marker">🔧</div>
+            </div>
+        </div>
+
+        <div class="completion-badge">
+            🎊 Complete Flow: 5 Steps
+        </div>
+    </div>
+
+    <script>
+        function handleStepClick(stepNumber) {
+            console.log(`Clicked step ${stepNumber}`);
+            // Could expand to show modal with detailed code examples
+        }
+
+        // Add smooth scroll reveal animation
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.timeline-step').forEach(step => {
+            observer.observe(step);
+        });
+    </script>
+</body>
+</html>
